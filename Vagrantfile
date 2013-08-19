@@ -7,11 +7,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define :db do |db|
     db.vm.provision :shell, :path => "db-provision.sh"
     db.vm.network :forwarded_port, :guest => 22, :host => 7000
+    db.vm.network :forwarded_port, :guest => 5432, :host => 7050
+    db.vm.synced_folder "cache/yum", "/var/cache/yum"
+    db.vm.synced_folder "cache/wget", "/var/cache/wget"
   end
 
+=begin
   config.vm.define :app do |app|
     app.vm.provision :shell, :path => "app-provision.sh"
-    app.vm.network :forwarded_port, :guest => 22, :host => 7001
+    app.vm.network :forwarded_port, :guest => 22, :host => 7100
   end
+=end
 
 end
