@@ -9,7 +9,7 @@ rpm -Uvh http://yum.postgresql.org/9.2/redhat/rhel-6-x86_64/pgdg-centos92-9.2-6.
 # Install PostgreSQL.
 yum install -y postgresql92 postgresql92-server postgresql92-contrib
 # Change the password for the default Linux user.
-echo "p05t61235" | passwd postgres --stdin
+# echo "p05t61235" | passwd postgres --stdin
 # Initialise the database.
 su - postgres -c /usr/pgsql-9.2/bin/initdb
 # Change the PostgreSQL configuration: listen to any remote addresses.
@@ -24,3 +24,5 @@ service postgresql-9.2 start
 
 # Install TMux.
 rpm -Uvh http://pkgs.repoforge.org/tmux/tmux-1.6-1.el6.rf.x86_64.rpm
+
+# CREATE ROLE cashbook WITH SUPERUSER LOGIN PASSWORD 'c45h13001<';
