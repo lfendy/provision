@@ -33,20 +33,17 @@ gem install bundler --no-ri --no-rdoc
 rbenv rehash
 
 # Allow all users to read write execute rbenv
-chmod -R 777 /usr/local/.rbenv
+chmod -R 755 /usr/local/.rbenv
+# Install nginx.
+cp -f /var/cache/scripts/nginx.repo /etc/yum.repos.d/nginx.repo
+yum install -y nginx1
+# Install Unicorn.
+gem install unicorn
 
-#Install Apache.
-yum install -y httpd
-# Install Passenger.
-gem install passenger --no-ri --no-rdoc
-# Install dependencies for Passenger.
-yum install -y curl-devel httpd-devel apr-devel apr-util-devel
-# Install Apache module for Passenger.
-passenger-install-apache2-module --auto
-# Edit Apache config file.
-sed -i "s/^.*rbenv.*//g" /etc/httpd/conf/httpd.conf
-echo 'LoadModule passenger_module /usr/local/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/passenger-4.0.14/buildout/apache2/mod_passenger.so' >> /etc/httpd/conf/httpd.conf
-echo 'PassengerRoot /usr/local/.rbenv/versions/2.0.0-p247/lib/ruby/gems/2.0.0/gems/passenger-4.0.14' >> /etc/httpd/conf/httpd.conf
-echo 'PassengerDefaultRuby /usr/local/.rbenv/versions/2.0.0-p247/bin/ruby' >> /etc/httpd/conf/httpd.conf
-# Retstart the Apache service.
-service httpd restart
+# Set up Unicorn to work with nginx.
+mkdir /var/www
+chgrp -R nginx /var/www
+chmod -R 775 /var/www
+usermod -a -G nginx vagrant
+
+yum install -y postgresql-devel.x86_64
